@@ -155,6 +155,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/23/LeetCode/202111232059_391_%E5%AE%8C%E7%BE%8E%E7%9F%A9%E5%BD%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HZMCIU's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/23/LeetCode/202111232059_391_%E5%AE%8C%E7%BE%8E%E7%9F%A9%E5%BD%A2/" class="post-title-link" itemprop="url">完美矩形</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-11-23 20:58:29 / Modified: 21:00:33" itemprop="dateCreated datePublished" datetime="2021-11-23T20:58:29+08:00">2021-11-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="完美矩形"><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/perfect-rectangle/">391.完美矩形</a></h3>
+<h3 id="思路">思路</h3>
+<h4 id="找规律">找规律</h4>
+<p>如果小矩形恰好拼接成一个大矩形，需要满足什么几何特征 * 显然，小矩形的面积之和等于大矩形的面积 * 分析平面几何的要素：点、线、面积、周长，是否存在其他的规律性。不难发现，完美矩形中所有的小矩形的顶点都重合。且重合位置的顶点数量为2个或者4个</p>
+<p>通过上述的结论，完美矩形的判定算法如下 * 首先，计算小矩形之和是否等于大矩形 * 使用<code>map</code>记录各个顶点所在位置的顶点出现次数，判断除大矩形的四个角所在位置的顶点出现次数，是否为2或4</p>
+<h4 id="扫描线">扫描线</h4>
+<ul>
+<li>将小矩形看作竖直线段，有一个四元组表示，(x,y1,y2,f)，其中f是用来标识竖直线段是出边还是入边</li>
+<li>大矩形如果是完美矩形的话，除边缘线段之外，矩形内部的竖直的线段重合且成对出现。同一横坐标的竖直线段在y轴方向上不会重合。</li>
+</ul>
+<p>算法流程如下</p>
+<ul>
+<li>根据矩形的左下顶点和右上顶点，将矩形分割为一系列由四元组表示的竖直线段，依据横坐标对四元组升序排序，横坐标相同，则根据y1进行升序排序</li>
+<li>将相同横坐标下的竖直线段按照出边和入边分为两类
+<ul>
+<li>检查同属一类的线段是否在竖直方向上出现重叠的情况</li>
+<li>两条竖直线段如果首位相接，那么将其“合并”为一条竖直线段</li>
+<li>检查、“合并”后，检验两类边是否成对出现。即，左右两类边合并后数量是否一致，竖直高度是否一致</li>
+</ul></li>
+</ul>
+<p><strong>技巧</strong></p>
+<ul>
+<li>不去使用两套循环变量操作容器，容易造成混淆</li>
+<li>for循环中，循环变量的更改在循环体中进行</li>
+<li>使用引用减少重复代码的编写</li>
+<li>变量a,b中，有且只有一个为1，使用<code>a+b == 1</code>简化判断逻辑</li>
+</ul>
+<h4 id="格林公式">格林公式</h4>
+<ul>
+<li>小矩形能够拼接成一个大矩形，那么该大矩形区域一定是一个 <strong>单连通区域</strong>。</li>
+<li>对完美矩形使用格林公式可得，对大矩形的曲线积分等于对小矩形的面积积分
+<ul>
+<li><span class="math display">\[\iint_\limits{D}^{} \left ( \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} \right) dxdy = \oint_\limits{L} Pdx+Qdy \]</span></li>
+<li>假定矩形的左下角顶点为<span class="math inline">\((x_{i},y_{i})\)</span>，右上角顶点为<span class="math inline">\((a_{i},b_{i})\)</span>。完美矩形的两顶点分别为<span class="math inline">\((x_{m},y_{m})\)</span> 和 <span class="math inline">\((a_{m},b_{m})\)</span></li>
+<li>带入<span class="math inline">\(P=0\)</span>, <span class="math inline">\(Q=x,x^{2},x^{2}y\)</span> ，在上述的区域内分别计算完美矩形的曲线积分和小矩形的面积积分得到如下的等式
+<ul>
+<li><span class="math inline">\((a_{m}-x_{m})(b_{m}-y_{m})=\sum_\limits{i}^{} (a_{i}-x_{i})(b_{i}-y_{i})\)</span></li>
+<li><span class="math inline">\((a_{m}^{2}-x_{m}^{2})(b_{m}-y_{m})=\sum_\limits{i}^{} (a_{i}^{2}-x_{i}^{2})(b_{i}-y_{i})\)</span></li>
+<li><span class="math inline">\((a_{m}-x_{m})(b_{m}^{2}-y_{m}^{2})=\sum_\limits{i}^{} (a_{i}-x_{i})(b_{i}^{2}-y_{i}^{2})\)</span></li>
+<li><span class="math inline">\((a_{m}^{2}-x_{m}^{2})(b_{m}^{2})(b_{m}^{2}-y_{m}^{2})=\sum_\limits{i}^{} (a_{i}^{2}-x_{i}^{2})(b_{i}^{2}-y_{i}^{2})\)</span></li>
+</ul></li>
+<li>使用上面的等式结论，遍历各个小矩形验证是否相等</li>
+</ul></li>
+</ul>
+<h3 id="ac代码">AC代码</h3>
+<h4 id="找规律-1">找规律</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">typedef</span> pair&lt;ll, ll&gt; po;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isRectangleCover</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; rect)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        ll x1 = rect[<span class="number">0</span>][<span class="number">0</span>], y1 = rect[<span class="number">0</span>][<span class="number">1</span>], x2 = rect[<span class="number">0</span>][<span class="number">2</span>], y2 = rect[<span class="number">0</span>][<span class="number">3</span>];</span><br><span class="line">        ll tot = <span class="number">0</span>;</span><br><span class="line">        map&lt;pair&lt;ll, ll&gt;, <span class="keyword">int</span>&gt; map_;</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;<span class="keyword">int</span>&gt;&amp; p : rect) &#123;</span><br><span class="line">            x1 = <span class="built_in">min</span>(x1, (ll) p[<span class="number">0</span>]);</span><br><span class="line">            y1 = <span class="built_in">min</span>(y1, (ll) p[<span class="number">1</span>]);</span><br><span class="line">            x2 = <span class="built_in">max</span>(x2, (ll) p[<span class="number">2</span>]);</span><br><span class="line">            y2 = <span class="built_in">max</span>(y2, (ll) p[<span class="number">3</span>]);</span><br><span class="line">            tot += ((ll)p[<span class="number">2</span>] - (ll)p[<span class="number">0</span>]) * ((ll)p[<span class="number">3</span>] - (ll)p[<span class="number">1</span>]);</span><br><span class="line">            map_[ &#123;p[<span class="number">0</span>], p[<span class="number">1</span>]&#125;] += <span class="number">1</span>;</span><br><span class="line">            map_[ &#123;p[<span class="number">0</span>], p[<span class="number">3</span>]&#125;] += <span class="number">1</span>;</span><br><span class="line">            map_[ &#123;p[<span class="number">2</span>], p[<span class="number">1</span>]&#125;] += <span class="number">1</span>;</span><br><span class="line">            map_[ &#123;p[<span class="number">2</span>], p[<span class="number">3</span>]&#125;] += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (map_[ &#123;x1, y1&#125;] != <span class="number">1</span> || map_[ &#123;x1, y2&#125;] != <span class="number">1</span> || map_[ &#123;x2, y1&#125;] != <span class="number">1</span> || map_[ &#123;x2, y2&#125;] != <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        map_.<span class="built_in">erase</span>(<span class="built_in">make_pair</span>(x1, y1));</span><br><span class="line">        map_.<span class="built_in">erase</span>(<span class="built_in">make_pair</span>(x1, y2));</span><br><span class="line">        map_.<span class="built_in">erase</span>(<span class="built_in">make_pair</span>(x2, y1));</span><br><span class="line">        map_.<span class="built_in">erase</span>(<span class="built_in">make_pair</span>(x2, y2));</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; e : map_) &#123;</span><br><span class="line">            <span class="keyword">if</span> (e.second != <span class="number">2</span> &amp;&amp; e.second != <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> tot == (x2 - x1) * (y2 - y1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="扫描线-1">扫描线</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isRectangleCover</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; rectangles)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; es;</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;<span class="keyword">int</span>&gt;&amp; rect : rectangles) &#123;</span><br><span class="line">            <span class="keyword">int</span> x1 = rect[<span class="number">0</span>], x2 = rect[<span class="number">2</span>], y1 = rect[<span class="number">1</span>], y2 = rect[<span class="number">3</span>];</span><br><span class="line">            es.<span class="built_in">push_back</span>(&#123;x1, y1, y2, <span class="number">1</span>&#125;);</span><br><span class="line">            es.<span class="built_in">push_back</span>(&#123;x2, y1, y2, <span class="number">-1</span>&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">sort</span>(es.<span class="built_in">begin</span>(), es.<span class="built_in">end</span>(), comp);</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; le, re;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">size_t</span> l = <span class="number">0</span>; l &lt; es.<span class="built_in">size</span>();) &#123;</span><br><span class="line">            <span class="keyword">size_t</span> r = l;</span><br><span class="line">            <span class="keyword">while</span> (r &lt; es.<span class="built_in">size</span>() &amp;&amp; es[r][<span class="number">0</span>] == es[l][<span class="number">0</span>]) &#123;</span><br><span class="line">                r++;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            re.<span class="built_in">clear</span>();</span><br><span class="line">            le.<span class="built_in">clear</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = l; i &lt; r; i++) &#123;</span><br><span class="line">                vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; li = es[i][<span class="number">3</span>] == <span class="number">1</span> ? le : re;</span><br><span class="line">                <span class="keyword">if</span> (li.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                    li.<span class="built_in">push_back</span>(&#123;es[i][<span class="number">1</span>], es[i][<span class="number">2</span>]&#125;);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    vector&lt;<span class="keyword">int</span>&gt;&amp; prev = li[li.<span class="built_in">size</span>() - <span class="number">1</span>];</span><br><span class="line">                    <span class="keyword">if</span> (prev[<span class="number">1</span>] == es[i][<span class="number">1</span>]) &#123;</span><br><span class="line">                        prev[<span class="number">1</span>] = es[i][<span class="number">2</span>];</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> &#123;</span><br><span class="line">                        li.<span class="built_in">push_back</span>(&#123;es[i][<span class="number">1</span>], es[i][<span class="number">2</span>]&#125;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (l &gt; <span class="number">0</span> &amp;&amp; r &lt; es.<span class="built_in">size</span>()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (le.<span class="built_in">size</span>() != re.<span class="built_in">size</span>()) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; le.<span class="built_in">size</span>(); ++i) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (le[i][<span class="number">0</span>] == re[i][<span class="number">0</span>] &amp;&amp; le[i][<span class="number">1</span>] == re[i][<span class="number">1</span>]) &#123;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (le.<span class="built_in">size</span>() + re.<span class="built_in">size</span>() != <span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            l = r;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">comp</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; a, vector&lt;<span class="keyword">int</span>&gt;&amp; b)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (a[<span class="number">0</span>] != b[<span class="number">0</span>]) &#123;</span><br><span class="line">            <span class="keyword">return</span> a[<span class="number">0</span>] &lt; b[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (a[<span class="number">1</span>] != b[<span class="number">1</span>]) &#123;</span><br><span class="line">            <span class="keyword">return</span> a[<span class="number">1</span>] &lt; b[<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="格林公式-1">格林公式</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isRectangleCover</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; rect)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> xm = rect[<span class="number">0</span>][<span class="number">0</span>], ym = rect[<span class="number">0</span>][<span class="number">1</span>], am = rect[<span class="number">0</span>][<span class="number">2</span>], bm = rect[<span class="number">0</span>][<span class="number">3</span>];</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> s1 = <span class="number">0</span>, s2 = <span class="number">0</span>, s3 = <span class="number">0</span>, s4 = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;<span class="keyword">int</span>&gt;&amp; p : rect) &#123;</span><br><span class="line">            <span class="keyword">long</span> <span class="keyword">long</span> x = p[<span class="number">0</span>], y = p[<span class="number">1</span>], a = p[<span class="number">2</span>], b = p[<span class="number">3</span>];</span><br><span class="line">            <span class="keyword">long</span> <span class="keyword">long</span>  x1 = a - x, x2 = a * a - x * x, y1 = b - y, y2 = b * b - y * y;</span><br><span class="line">            s1 += x1 * y1;</span><br><span class="line">            s2 += x2 * y1;</span><br><span class="line">            s3 += x1 * y2;</span><br><span class="line">            s4 += x2 * y2;</span><br><span class="line">            xm = <span class="built_in">min</span>(xm, x);</span><br><span class="line">            ym = <span class="built_in">min</span>(ym, y);</span><br><span class="line">            am = <span class="built_in">max</span>(am, a);</span><br><span class="line">            bm = <span class="built_in">max</span>(bm, b);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s1 == (am - xm) * (bm - ym) &amp;&amp; s2 == (am * am - xm * xm) * (bm - ym) &amp;&amp; s3 == (am - xm) * (bm * bm - ym * ym) &amp;&amp; (am * am - xm * xm) * (bm * bm - ym * ym) == s4;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/20/LeetCode/202111201625_218_%E5%A4%A9%E9%99%85%E7%BA%BF%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -332,7 +450,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -345,7 +463,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
