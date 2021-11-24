@@ -178,10 +178,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-11-23 20:58:29 / Modified: 21:00:33" itemprop="dateCreated datePublished" datetime="2021-11-23T20:58:29+08:00">2021-11-23</time>
+              <time title="Created: 2021-11-23 20:58:29" itemprop="dateCreated datePublished" datetime="2021-11-23T20:58:29+08:00">2021-11-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-11-24 10:08:07" itemprop="dateModified" datetime="2021-11-24T10:08:07+08:00">2021-11-24</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -206,8 +212,16 @@
           <h3 id="完美矩形"><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/perfect-rectangle/">391.完美矩形</a></h3>
 <h3 id="思路">思路</h3>
 <h4 id="找规律">找规律</h4>
-<p>如果小矩形恰好拼接成一个大矩形，需要满足什么几何特征 * 显然，小矩形的面积之和等于大矩形的面积 * 分析平面几何的要素：点、线、面积、周长，是否存在其他的规律性。不难发现，完美矩形中所有的小矩形的顶点都重合。且重合位置的顶点数量为2个或者4个</p>
-<p>通过上述的结论，完美矩形的判定算法如下 * 首先，计算小矩形之和是否等于大矩形 * 使用<code>map</code>记录各个顶点所在位置的顶点出现次数，判断除大矩形的四个角所在位置的顶点出现次数，是否为2或4</p>
+<p>如果小矩形恰好拼接成一个大矩形，需要满足什么几何特征</p>
+<ul>
+<li>显然，小矩形的面积之和等于大矩形的面积</li>
+<li>分析平面几何的要素：点、线、面积、周长，是否存在其他的规律性。不难发现，完美矩形中所有的小矩形的顶点都重合。且重合位置的顶点数量为2个或者4个</li>
+</ul>
+<p>通过上述的结论，完美矩形的判定算法如下</p>
+<ul>
+<li>首先，计算小矩形之和是否等于大矩形</li>
+<li>使用<code>map</code>记录各个顶点所在位置的顶点出现次数，判断除大矩形的四个角所在位置的顶点出现次数，是否为2或4</li>
+</ul>
 <h4 id="扫描线">扫描线</h4>
 <ul>
 <li>将小矩形看作竖直线段，有一个四元组表示，(x,y1,y2,f)，其中f是用来标识竖直线段是出边还是入边</li>
