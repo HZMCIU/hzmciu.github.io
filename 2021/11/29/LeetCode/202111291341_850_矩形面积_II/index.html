@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="850. 矩形面积 II 题目 我们给出了一个（轴对齐的）矩形列表 rectangles 。 对于 rectangle[i] &#x3D; [x1, y1, x2, y2]，其中（x1，y1）是矩形 i 左下角的坐标，（x2，y2）是该矩形右上角的坐标。 找出平面中所有矩形叠加覆盖后的总面积。 由于答案可能太大， 请返回它对 10 ^ 9 + 7 取模的结果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="矩形面积II">
+<meta property="og:url" content="http://example.com/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/index.html">
+<meta property="og:site_name" content="HZMCIU&#39;s Blog">
+<meta property="og:description" content="850. 矩形面积 II 题目 我们给出了一个（轴对齐的）矩形列表 rectangles 。 对于 rectangle[i] &#x3D; [x1, y1, x2, y2]，其中（x1，y1）是矩形 i 左下角的坐标，（x2，y2）是该矩形右上角的坐标。 找出平面中所有矩形叠加覆盖后的总面积。 由于答案可能太大， 请返回它对 10 ^ 9 + 7 取模的结果">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/202111291137_850_rectangle_area_ii_intersect_area.png">
+<meta property="og:image" content="http://example.com/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/202111291137_850_rectangle_area_ii_compress_cordinate.png">
+<meta property="og:image" content="http://example.com/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/202111291137_850_rectangle_area_ii_scanning.svg">
+<meta property="article:published_time" content="2021-11-29T06:08:04.989Z">
+<meta property="article:modified_time" content="2021-11-29T06:25:06.053Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="扫描线">
+<meta property="article:tag" content="数学技巧">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/202111291137_850_rectangle_area_ii_intersect_area.png">
+
+<link rel="canonical" href="http://example.com/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>矩形面积II | HZMCIU's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">HZMCIU's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HZMCIU's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          矩形面积II
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-11-29 14:08:04 / Modified: 14:25:06" itemprop="dateCreated datePublished" datetime="2021-11-29T14:08:04+08:00">2021-11-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="矩形面积-ii"><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/rectangle-area-ii/">850. 矩形面积 II</a></h3>
+<h3 id="题目">题目</h3>
+<p>我们给出了一个（轴对齐的）矩形列表 <code>rectangles</code> 。 对于 <code>rectangle[i] = [x1, y1, x2, y2]</code>，其中（x1，y1）是矩形 <code>i</code> 左下角的坐标，（x2，y2）是该矩形右上角的坐标。</p>
+<p>找出平面中所有矩形叠加覆盖后的总面积。 由于答案可能太大， <strong>请返回它对 10 ^ 9 + 7 取模的结果</strong></p>
+<span id="more"></span>
+<h3 id="思路">思路</h3>
+<h4 id="容斥原理">容斥原理</h4>
+<ul>
+<li>枚举不同个数矩形重叠面积的计算公式，归纳总结出<span class="math inline">\(n\)</span> 个矩形的面积计算公式
+<ul>
+<li>假设有两个矩形，重叠后的覆盖面积计算公式为
+<ul>
+<li><span class="math inline">\(|A \cup B| = |A| + |B| - |A \cap B|\)</span></li>
+</ul></li>
+<li>假设有三个矩形，重叠后的覆盖面积计算公式为
+<ul>
+<li><span class="math inline">\(|A\cup B\cup C|=|A|+|B|+|C|-|A \cap B| -|A \cap C| -|B\cap C|+|A\cap B\cap C|\)</span></li>
+</ul></li>
+<li>假设有四个矩形，重叠后的覆盖面积计算公式为
+<ul>
+<li><span class="math inline">\(\begin{align} |A \cup B \cup C \cup D| =\,&amp;\left( |A| + |B| + |C| + |D| \right) - \\ \,&amp;\left(|A \cap B| + |A \cap C| + |A \cap D| + |B \cap C| + |B \cap D| + |C \cap D|\right) +\\ \,&amp;\left(|A \cap B \cap C| + |A \cap B \cap D| + |A \cap C \cap D| + |B \cap C \cap D|\right) -\\ \,&amp;\left(|A \cap B \cap C \cap D|\right) \end{align}\)</span></li>
+</ul></li>
+<li><font color="red"><strong><span class="math inline">\(n\)</span> 个矩形 <span class="math inline">\(A_{1},A_{2},\cdots,A_{n}\)</span>重叠后的总面积为</strong></font>
+<ul>
+<li><span class="math display">\[\left| \bigcup_{i=1}^{n} A_{i} \right| = \sum_{\emptyset \neq S \subset [n]}^{} \left( -1 \right) ^{|S|+1} \left| \bigcap_{i \in S}  A_{i} \right|\]</span></li>
+</ul></li>
+</ul></li>
+<li>计算<span class="math inline">\(n\)</span> 个矩形的重叠面积
+<ul>
+<li>首先，计算两个矩形重叠得到的矩形。其次，将重叠得到的矩形与第三个矩形相交。以此类推。</li>
+<li>如下图所示，两个矩形相交,通过以下公式计算出相交的面积
+<ul>
+<li><img src="/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/202111291137_850_rectangle_area_ii_intersect_area.png" class=""></li>
+<li><span class="math inline">\(\Delta w = w_{1} + w_{2} -W, \Delta h = h_{1}+h_{2}- H\)</span></li>
+<li><span class="math inline">\(W\)</span> 相距最远的 <strong>竖边</strong> 的距离差，<span class="math inline">\(H\)</span> 为相距最远 <strong>横边</strong> 的距离差</li>
+</ul></li>
+</ul></li>
+</ul>
+<h4 id="坐标压缩">坐标压缩</h4>
+<ul>
+<li>多个矩形重叠后所形成的图形，可以被原矩形所在的边（横边，竖边）切割成一个个小矩形。重叠后的图形可以视作由这些小矩形拼接而成的。如下图所示
+<ul>
+<li><img src="/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/202111291137_850_rectangle_area_ii_compress_cordinate.png" class=""></li>
+<li>重叠形成的图形，可以被矩形的边切割成5个小矩形，各自用不同的颜色标出。</li>
+<li>上图的重叠面积小，能直接暴力求解出重叠面积。使用二维数组模拟网格线，对网格线中被矩形覆盖单元打上标记，然后遍历二维数组得到重叠形成的面积。</li>
+</ul></li>
+<li>如果图形较大，可以将坐标压缩，将坐标映射成单位长度，即将原来的图形被映射为单位网格线中的图形。然后使用二维数组模拟网格线，将被图形覆盖部分打上标记。对于映射后的矩形(rx1,ry1,rx2,ry2)，对于网格中所有满足<span class="math inline">\(rx_{1} \le x \le rx_{2}\)</span>，<span class="math inline">\(ry_{1} \le y \le ry_{2}\)</span>的点，标记 <code>grid[x][y]=true</code>
+<ul>
+<li>经过坐标压缩后的小矩形， 是由 <strong>若干个单位正方形</strong> 拼接而成的</li>
+<li>遍历二维数组，计算小矩形的真实面积。小矩形是由若干个单位正方形组成的，所以计算面积时需要将映射后的坐标还原成原来的坐标</li>
+<li>由于 <code>i2x</code> 记录的是单位网格线的 <strong>左边</strong>，所以映射后的单位正方形所对应的实际矩形的面积为 <code>(i2x[i + 1] - i2x[i]) * (j2y[j + 1] - j2y[j])</code></li>
+</ul></li>
+</ul>
+<h4 id="扫描线">扫描线</h4>
+<ul>
+<li>如下图所示，一根平行于x轴的水平线，从下往上扫描，遇到一条矩形的 <strong>横边</strong> 将图形做一次切割。将原图形根据高度不同切割为若干个小矩形
+<ul>
+<li><img src="/2021/11/29/LeetCode/202111291341_850_%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF_II/202111291137_850_rectangle_area_ii_scanning.svg" class=""></li>
+<li>小矩形的高度可以通过矩形顶点的纵坐标的差值得到</li>
+<li>小矩形的宽度是在扫描过程中是动态变化的。线段树可以维护动态区间和，因此使用线段树来计算扫描过程中的矩形的宽度</li>
+</ul></li>
+<li>为了便于线段树维护小矩形的宽度，需要将横坐标映射为单位长度</li>
+<li>线段树节点 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> len; <span class="comment">// 节点所维护区间中线段覆盖的长度</span></span><br><span class="line">    <span class="keyword">int</span> cnt; <span class="comment">// 节点维护区间被完全覆盖的次数</span></span><br><span class="line">&#125; tree[maxn];</span><br></pre></td></tr></table></figure></li>
+<li><code>pushup</code> 函数，<code>pushup</code>函数用于整个线段树 <code>update</code> 之后，更新当前节点的状态 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pushup</span><span class="params">(<span class="keyword">int</span> rt, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (tree[rt].cnt &gt; <span class="number">0</span>) &#123; <span class="comment">// 如果被完全覆盖，那么覆盖的长度就为所维护的长度</span></span><br><span class="line">        tree[rt].len = i2x[r] - i2x[l - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123; <span class="comment">// 没有被完全覆盖，那么所维护的区间的覆盖长度为左子节点的长度加上右子节点的长度</span></span><br><span class="line">        tree[rt].len = tree[rt &lt;&lt; <span class="number">1</span>].len + tree[rt &lt;&lt; <span class="number">1</span> | <span class="number">1</span>].len;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="代码">代码</h3>
+<h4 id="容斥原理-1">容斥原理</h4>
+<p>显然这份代码会超时 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span>  <span class="keyword">long</span> <span class="keyword">long</span>  ll;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rectangleArea</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; rectangles)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = rectangles.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> mod = <span class="number">1000000007</span>;</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; (<span class="number">1</span> &lt;&lt; n); ++i) &#123;</span><br><span class="line">            vector&lt;<span class="keyword">int</span>&gt; rect&#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">1000000000</span>, <span class="number">1000000000</span>&#125;;</span><br><span class="line">            <span class="keyword">int</span> parity = <span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (((i &gt;&gt; j) &amp; <span class="number">1</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">                    parity *= <span class="number">-1</span>;</span><br><span class="line">                    <span class="built_in">intersect</span>(rect, rectangles[j]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            sum += parity * (ll)(rect[<span class="number">2</span>] - rect[<span class="number">0</span>]) * (ll)(rect[<span class="number">3</span>] - rect[<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        sum %= mod;</span><br><span class="line">        <span class="keyword">if</span> (sum &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            sum += mod;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">intersect</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; rect1, vector&lt;<span class="keyword">int</span>&gt;&amp; rect2)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        rect1[<span class="number">0</span>] = <span class="built_in">max</span>(rect1[<span class="number">0</span>], rect2[<span class="number">0</span>]);</span><br><span class="line">        rect1[<span class="number">1</span>] = <span class="built_in">max</span>(rect1[<span class="number">1</span>], rect2[<span class="number">1</span>]);</span><br><span class="line">        rect1[<span class="number">2</span>] = <span class="built_in">min</span>(rect1[<span class="number">2</span>], rect2[<span class="number">2</span>]);</span><br><span class="line">        rect1[<span class="number">3</span>] = <span class="built_in">min</span>(rect1[<span class="number">3</span>], rect2[<span class="number">3</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h4 id="坐标压缩-1">坐标压缩</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rectangleArea</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; rectangles)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        set&lt;ll&gt; set_x, set_y;</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;<span class="keyword">int</span>&gt;&amp; rect : rectangles) &#123;</span><br><span class="line">            set_x.<span class="built_in">insert</span>(rect[<span class="number">0</span>]);</span><br><span class="line">            set_x.<span class="built_in">insert</span>(rect[<span class="number">2</span>]);</span><br><span class="line">            set_y.<span class="built_in">insert</span>(rect[<span class="number">1</span>]);</span><br><span class="line">            set_y.<span class="built_in">insert</span>(rect[<span class="number">3</span>]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        vector&lt;ll&gt; i2x, j2y;</span><br><span class="line">        map&lt;ll, <span class="keyword">int</span>&gt; x2i, y2j;</span><br><span class="line">        i2x.<span class="built_in">assign</span>(set_x.<span class="built_in">begin</span>(), set_x.<span class="built_in">end</span>());</span><br><span class="line">        j2y.<span class="built_in">assign</span>(set_y.<span class="built_in">begin</span>(), set_y.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; i2x.<span class="built_in">size</span>(); ++i) &#123;</span><br><span class="line">            x2i[i2x[i]] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; j2y.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">            y2j[j2y[j]] = j;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">bool</span>&gt;&gt; <span class="built_in">grid</span>(i2x.<span class="built_in">size</span>(), vector&lt;<span class="keyword">bool</span>&gt;(j2y.<span class="built_in">size</span>(), <span class="number">0</span>));</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;<span class="keyword">int</span>&gt;&amp; rect : rectangles) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> x = x2i[rect[<span class="number">0</span>]]; x &lt; x2i[rect[<span class="number">2</span>]]; ++x) &#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> y = y2j[rect[<span class="number">1</span>]]; y &lt; y2j[rect[<span class="number">3</span>]]; ++y) &#123;</span><br><span class="line">                    grid[x][y] = <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ll res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">const</span> ll mod = <span class="number">1000000007</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">size_t</span> x = <span class="number">0</span>; x &lt; grid.<span class="built_in">size</span>(); x++) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">size_t</span> y = <span class="number">0</span>; y &lt; grid[<span class="number">0</span>].<span class="built_in">size</span>(); ++y) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[x][y] == <span class="literal">true</span>) &#123;</span><br><span class="line">                    res += (i2x[x + <span class="number">1</span>] - i2x[x]) * (j2y[y + <span class="number">1</span>] - j2y[y]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res % mod;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="扫描线-1">扫描线</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">static</span> <span class="keyword">int</span> maxn = <span class="number">10000</span>;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">        <span class="keyword">int</span> len;</span><br><span class="line">        <span class="keyword">int</span> cnt;</span><br><span class="line">    &#125; tree[maxn];</span><br><span class="line">    vector&lt;<span class="keyword">long</span> <span class="keyword">long</span>&gt; i2x;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rectangleArea</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; rectangles)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        set&lt;<span class="keyword">int</span>&gt; set_x;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; es;</span><br><span class="line">        map&lt;<span class="keyword">long</span> <span class="keyword">long</span>, <span class="keyword">int</span>&gt; x2i;</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;<span class="keyword">int</span>&gt;&amp; rect : rectangles) &#123;</span><br><span class="line">            es.<span class="built_in">push_back</span>(&#123;rect[<span class="number">1</span>], rect[<span class="number">0</span>], rect[<span class="number">2</span>], <span class="number">1</span>&#125;);</span><br><span class="line">            es.<span class="built_in">push_back</span>(&#123;rect[<span class="number">3</span>], rect[<span class="number">0</span>], rect[<span class="number">2</span>], <span class="number">-1</span>&#125;);</span><br><span class="line">            set_x.<span class="built_in">insert</span>(rect[<span class="number">0</span>]);</span><br><span class="line">            set_x.<span class="built_in">insert</span>(rect[<span class="number">2</span>]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        i2x.<span class="built_in">assign</span>(set_x.<span class="built_in">begin</span>(), set_x.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">int</span> n = i2x.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            x2i[i2x[i]] = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">sort</span>(es.<span class="built_in">begin</span>(), es.<span class="built_in">end</span>(), [](vector&lt;<span class="keyword">int</span>&gt;&amp; a, vector&lt;<span class="keyword">int</span>&gt;&amp; b) &#123;</span><br><span class="line">            <span class="keyword">return</span> a[<span class="number">0</span>] &lt; b[<span class="number">0</span>];</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> prev_y = es[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="built_in">build</span>(<span class="number">1</span>, <span class="number">1</span>, n - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; es.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> y = es[i][<span class="number">0</span>], x1 = es[i][<span class="number">1</span>], x2 = es[i][<span class="number">2</span>], type = es[i][<span class="number">3</span>];</span><br><span class="line">            <span class="keyword">long</span> <span class="keyword">long</span> sum_x = <span class="built_in">query</span>(<span class="number">1</span>, <span class="number">1</span>, n - <span class="number">1</span>, <span class="number">1</span>, n - <span class="number">1</span>);</span><br><span class="line">            <span class="built_in">update</span>(<span class="number">1</span>, <span class="number">1</span>, n - <span class="number">1</span>, x2i[x1] + <span class="number">1</span>, x2i[x2], type);</span><br><span class="line">            ans += sum_x * (es[i][<span class="number">0</span>] - prev_y);</span><br><span class="line">            prev_y = es[i][<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans % mod;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">(<span class="keyword">int</span> rt, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l == r) &#123;</span><br><span class="line">            tree[rt].len = <span class="number">0</span>;</span><br><span class="line">            tree[rt].cnt = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">        <span class="built_in">build</span>(rt &lt;&lt; <span class="number">1</span>, l, mid);</span><br><span class="line">        <span class="built_in">build</span>(rt &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid + <span class="number">1</span>, r);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">query</span><span class="params">(<span class="keyword">int</span> rt, <span class="keyword">int</span> l, <span class="keyword">int</span> r, <span class="keyword">int</span> ql, <span class="keyword">int</span> qr)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l &gt; qr || ql &gt; r) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (ql &lt;= l &amp;&amp; r &lt;= qr) &#123;</span><br><span class="line">            <span class="keyword">return</span> tree[rt].len;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> a = <span class="built_in">query</span>(rt &lt;&lt; <span class="number">1</span>, l, mid, ql, qr);</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> b = <span class="built_in">query</span>(rt &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid + <span class="number">1</span>, r, ql, qr);</span><br><span class="line">        <span class="keyword">return</span> a + b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> rt, <span class="keyword">int</span> l, <span class="keyword">int</span> r, <span class="keyword">int</span> ul, <span class="keyword">int</span> ur, <span class="keyword">int</span> type)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l &gt; ur || ul &gt; r) &#123;</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (ul &lt;= l &amp;&amp; r &lt;= ur) &#123;</span><br><span class="line">            tree[rt].cnt += type;</span><br><span class="line">            <span class="built_in">pushup</span>(rt, l, r);</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">update</span>(rt &lt;&lt; <span class="number">1</span>, l, mid, ul, ur, type);</span><br><span class="line">        <span class="built_in">update</span>(rt &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid + <span class="number">1</span>, r, ul, ur, type);</span><br><span class="line">        <span class="built_in">pushup</span>(rt, l, r);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pushup</span><span class="params">(<span class="keyword">int</span> rt, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (tree[rt].cnt &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            tree[rt].len = i2x[r] - i2x[l - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            tree[rt].len = tree[rt &lt;&lt; <span class="number">1</span>].len + tree[rt &lt;&lt; <span class="number">1</span> | <span class="number">1</span>].len;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%89%AB%E6%8F%8F%E7%BA%BF/" rel="tag"># 扫描线</a>
+              <a href="/tags/%E6%95%B0%E5%AD%A6%E6%8A%80%E5%B7%A7/" rel="tag"># 数学技巧</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/23/LeetCode/202111232059_391_%E5%AE%8C%E7%BE%8E%E7%9F%A9%E5%BD%A2/" rel="prev" title="完美矩形">
+      <i class="fa fa-chevron-left"></i> 完美矩形
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF-ii"><span class="nav-number">1.</span> <span class="nav-text">850. 矩形面积 II</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text">容斥原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%90%E6%A0%87%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.2.</span> <span class="nav-text">坐标压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%AB%E6%8F%8F%E7%BA%BF"><span class="nav-number">3.3.</span> <span class="nav-text">扫描线</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86-1"><span class="nav-number">4.1.</span> <span class="nav-text">容斥原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%90%E6%A0%87%E5%8E%8B%E7%BC%A9-1"><span class="nav-number">4.2.</span> <span class="nav-text">坐标压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%AB%E6%8F%8F%E7%BA%BF-1"><span class="nav-number">4.3.</span> <span class="nav-text">扫描线</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
